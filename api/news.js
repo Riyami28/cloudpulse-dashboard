@@ -3,30 +3,36 @@
 
 // Cloud-relevant keywords for filtering
 const CLOUD_KEYWORDS = [
-  "aws", "amazon web services", "ec2", "s3", "lambda",
+  "aws", "amazon web services", "ec2", "s3", "lambda", "dynamodb", "cloudfront",
   "azure", "microsoft cloud",
   "gcp", "google cloud", "bigquery", "vertex",
   "oracle cloud", "oci",
   "kubernetes", "k8s", "docker", "container", "helm", "istio",
   "terraform", "opentofu", "ansible", "pulumi", "infrastructure as code",
   "devops", "ci/cd", "cicd", "sre", "platform engineer",
-  "finops", "cloud cost", "billing", "cost optim",
+  "finops", "cloud cost", "cost optim",
   "serverless", "microservice",
   "cloud security", "iam", "zero trust", "devsecops",
-  "saas", "paas", "iaas",
   "cloud native", "cncf",
-  "observability", "monitoring", "prometheus", "grafana", "datadog",
+  "observability", "prometheus", "grafana", "datadog",
   "api gateway", "load balancer",
   "cloud migrat", "multi-cloud", "hybrid cloud",
-  "data pipeline", "data engineer", "mlops", "databricks", "snowflake",
-  "gpu", "ai infra", "machine learning",
-  "vercel", "netlify", "cloudflare",
-  "linux", "sysadmin", "deployment",
+  "data pipeline", "mlops", "databricks", "snowflake",
+  "ai infra",
+  "cloudflare workers", "vercel edge",
 ];
+
+// Keywords that need word-boundary matching to avoid false positives
+const BOUNDARY_KEYWORDS = ["oci", "s3", "iam", "sre"];
 
 function isCloudRelevant(title) {
   const lower = title.toLowerCase();
-  return CLOUD_KEYWORDS.some((kw) => lower.includes(kw));
+  return CLOUD_KEYWORDS.some((kw) => {
+    if (BOUNDARY_KEYWORDS.includes(kw)) {
+      return new RegExp(`\\b${kw}\\b`).test(lower);
+    }
+    return lower.includes(kw);
+  });
 }
 
 export default async function handler(req, res) {
@@ -39,8 +45,8 @@ export default async function handler(req, res) {
     if (!topRes.ok) throw new Error(`HN API: ${topRes.status}`);
     const ids = await topRes.json();
 
-    // Fetch more stories to have enough after filtering
-    const top60 = ids.slice(0, 60);
+    // Fetch more stories to have enough after cloud filtering
+    const top60 = ids.slice(0, 100);
     const stories = await Promise.all(
       top60.map(async (id) => {
         try {
@@ -65,24 +71,6 @@ export default async function handler(req, res) {
         time: s.time,
         by: s.by,
       }));
-
-    // If not enough cloud-relevant stories, include top general ones
-    if (filtered.length < 10) {
-      const general = stories
-        .filter((s) => s && s.title && s.url)
-        .filter((s) => !filtered.some((f) => f.id === s.id))
-        .slice(0, 15)
-        .map((s) => ({
-          id: s.id,
-          title: s.title,
-          url: s.url,
-          score: s.score,
-          descendants: s.descendants || 0,
-          time: s.time,
-          by: s.by,
-        }));
-      filtered.push(...general);
-    }
 
     res.status(200).json({ posts: filtered, fetchedAt: Date.now() });
   } catch (e) {

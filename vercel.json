@@ -5,6 +5,9 @@
     },
     "api/news.js": {
       "maxDuration": 15
+    },
+    "api/twitter.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
