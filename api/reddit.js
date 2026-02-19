@@ -16,7 +16,7 @@ const FETCH_SUBREDDITS = [
   { sub: "sre", category: "devops" },
   { sub: "docker", category: "devops" },
   { sub: "sysadmin", category: "devops" },
-  { sub: "cloudsecurity", category: "security" },
+  { sub: "netsec", category: "security" },
   { sub: "SaaS", category: "saas" },
 ];
 
