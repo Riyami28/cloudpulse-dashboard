@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "api/reddit.js": {
+      "maxDuration": 30
+    },
+    "api/news.js": {
+      "maxDuration": 15
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ]
+}
