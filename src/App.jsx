@@ -1,6 +1,21 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 
 // ═══════════════════════════════════════════════════════════
+// ICONS — Sun / Moon for theme toggle
+// ═══════════════════════════════════════════════════════════
+const SunIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zm8-5a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0118 10zM5 10a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 015 10zm11.95-4.95a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.9 9.9a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM16.95 15.95a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zm-9.9-9.9a.75.75 0 01-1.06 0L4.93 5.05a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06zM10 7a3 3 0 100 6 3 3 0 000-6z" />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+    <path fillRule="evenodd" d="M7.455 2.004a.75.75 0 01.26.77 7 7 0 009.958 7.967.75.75 0 011.067.853A8.5 8.5 0 116.647 1.921a.75.75 0 01.808.083z" clipRule="evenodd" />
+  </svg>
+);
+
+// ═══════════════════════════════════════════════════════════
 // 50+ TRACKED SUBREDDITS — FinOps, Cloud, DevOps, SRE, OCI
 // ═══════════════════════════════════════════════════════════
 const TRACKED_SUBREDDITS = [
@@ -284,61 +299,61 @@ const RelevanceBadge = ({ level }) => {
   const colors = {
     High: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
     Medium: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
-    Low: "bg-slate-500/20 text-slate-400 border border-slate-500/30",
+    Low: "bg-slate-200/60 dark:bg-slate-500/20 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-500/30",
   };
   return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${colors[level]}`}>{level}</span>;
 };
 
 const Tag = ({ label }) => {
   const colorMap = {
-    AWS: "bg-orange-500/15 text-orange-300", Azure: "bg-blue-500/15 text-blue-300", GCP: "bg-green-500/15 text-green-300", OCI: "bg-amber-500/15 text-amber-300",
-    FinOps: "bg-purple-500/15 text-purple-300", DevOps: "bg-cyan-500/15 text-cyan-300", Kubernetes: "bg-sky-500/15 text-sky-300", Security: "bg-red-500/15 text-red-300",
-    "Cost Optimization": "bg-yellow-500/15 text-yellow-300", "AI/ML": "bg-pink-500/15 text-pink-300", Competitors: "bg-rose-500/15 text-rose-300",
-    SaaS: "bg-indigo-500/15 text-indigo-300", SRE: "bg-teal-500/15 text-teal-300", "Multi-Cloud": "bg-violet-500/15 text-violet-300", Cloud: "bg-slate-500/15 text-slate-300",
+    AWS: "bg-orange-500/15 text-orange-600 dark:text-orange-300", Azure: "bg-blue-500/15 text-blue-600 dark:text-blue-300", GCP: "bg-green-500/15 text-green-600 dark:text-green-300", OCI: "bg-amber-500/15 text-amber-600 dark:text-amber-300",
+    FinOps: "bg-purple-500/15 text-purple-600 dark:text-purple-300", DevOps: "bg-cyan-500/15 text-cyan-600 dark:text-cyan-300", Kubernetes: "bg-sky-500/15 text-sky-600 dark:text-sky-300", Security: "bg-red-500/15 text-red-600 dark:text-red-300",
+    "Cost Optimization": "bg-yellow-500/15 text-yellow-600 dark:text-yellow-300", "AI/ML": "bg-pink-500/15 text-pink-600 dark:text-pink-300", Competitors: "bg-rose-500/15 text-rose-600 dark:text-rose-300",
+    SaaS: "bg-indigo-500/15 text-indigo-600 dark:text-indigo-300", SRE: "bg-teal-500/15 text-teal-600 dark:text-teal-300", "Multi-Cloud": "bg-violet-500/15 text-violet-600 dark:text-violet-300", Cloud: "bg-slate-500/15 text-slate-600 dark:text-slate-300",
   };
-  const color = colorMap[label] || "bg-slate-500/15 text-slate-400";
+  const color = colorMap[label] || "bg-slate-500/15 text-slate-500 dark:text-slate-400";
   return <span className={`px-2 py-0.5 rounded text-xs ${color}`}>{label}</span>;
 };
 
 const NewsCard = ({ item, expanded, onToggle }) => (
-  <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-5 hover:border-slate-600/70 transition-all duration-200 hover:bg-slate-800/80">
+  <div className="bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-xl p-5 hover:border-gray-300 dark:hover:border-slate-600/70 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-slate-800/80 shadow-sm dark:shadow-none">
     <div className="flex items-start justify-between gap-3 mb-3">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-lg">{item.sourceIcon}</span>
-          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-slate-400 font-medium uppercase tracking-wider hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-slate-600 hover:decoration-emerald-400">{item.source}</a>
+          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-gray-500 dark:text-slate-400 font-medium uppercase tracking-wider hover:text-emerald-400 transition-colors underline underline-offset-2 decoration-gray-300 dark:decoration-slate-600 hover:decoration-emerald-400">{item.source}</a>
           {item.subreddit && (
             <>
-              <span className="text-xs text-slate-600">&bull;</span>
+              <span className="text-xs text-gray-400 dark:text-slate-600">&bull;</span>
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-orange-400 hover:text-orange-300">{item.subreddit}</a>
             </>
           )}
-          <span className="text-xs text-slate-600">&bull;</span>
-          <span className="text-xs text-slate-500">{item.time}</span>
+          <span className="text-xs text-gray-400 dark:text-slate-600">&bull;</span>
+          <span className="text-xs text-gray-500 dark:text-slate-500">{item.time}</span>
           {item.engagement > 0 && (
             <>
-              <span className="text-xs text-slate-600">&bull;</span>
-              <span className="text-xs text-slate-500">{item.engagement.toLocaleString()} engagements</span>
+              <span className="text-xs text-gray-400 dark:text-slate-600">&bull;</span>
+              <span className="text-xs text-gray-500 dark:text-slate-500">{item.engagement.toLocaleString()} engagements</span>
             </>
           )}
         </div>
-        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-slate-100 leading-snug hover:text-emerald-400 transition-colors cursor-pointer block">{item.title}</a>
+        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-base font-semibold text-gray-900 dark:text-slate-100 leading-snug hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors cursor-pointer block">{item.title}</a>
       </div>
       <RelevanceBadge level={item.relevance} />
     </div>
-    <p className="text-sm text-slate-400 leading-relaxed mb-3">{item.summary}</p>
+    <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed mb-3">{item.summary}</p>
     <div className={`overflow-hidden transition-all duration-300 ${expanded ? "max-h-40 opacity-100 mb-3" : "max-h-0 opacity-0"}`}>
-      <div className="bg-slate-700/30 rounded-lg p-3 border-l-2 border-emerald-500/50">
+      <div className="bg-gray-100 dark:bg-slate-700/30 rounded-lg p-3 border-l-2 border-emerald-500/50">
         <p className="text-xs font-medium text-emerald-400 mb-1 uppercase tracking-wider">Blog Angle</p>
-        <p className="text-sm text-slate-300 leading-relaxed">{item.blogAngle}</p>
+        <p className="text-sm text-gray-700 dark:text-slate-300 leading-relaxed">{item.blogAngle}</p>
       </div>
     </div>
     <div className="flex items-center justify-between">
       <div className="flex flex-wrap gap-1.5">{item.tags.map((tag) => <Tag key={tag} label={tag} />)}</div>
       <div className="flex items-center gap-3 ml-3">
-        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors whitespace-nowrap flex items-center gap-1">Read Source <span className="text-sm">{"\u2197"}</span></a>
+        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-500 dark:text-cyan-400 hover:text-cyan-400 dark:hover:text-cyan-300 transition-colors whitespace-nowrap flex items-center gap-1">Read Source <span className="text-sm">{"\u2197"}</span></a>
         {item.blogAngle && (
-          <button onClick={onToggle} className="text-xs text-slate-500 hover:text-emerald-400 transition-colors whitespace-nowrap">{expanded ? "Hide angle \u25B2" : "Blog angle \u25BC"}</button>
+          <button onClick={onToggle} className="text-xs text-gray-500 dark:text-slate-500 hover:text-emerald-400 transition-colors whitespace-nowrap">{expanded ? "Hide angle \u25B2" : "Blog angle \u25BC"}</button>
         )}
       </div>
     </div>
@@ -348,41 +363,41 @@ const NewsCard = ({ item, expanded, onToggle }) => (
 const CompetitorCard = ({ intel }) => {
   const severityColor = { high: "border-l-red-500", medium: "border-l-amber-500", low: "border-l-slate-500" };
   return (
-    <div className={`bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 border-l-4 ${severityColor[intel.severity]}`}>
+    <div className={`bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 border-l-4 shadow-sm dark:shadow-none ${severityColor[intel.severity]}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-slate-200 hover:text-emerald-400 transition-colors">{intel.company}</a>
-          <span className="px-2 py-0.5 rounded text-xs bg-slate-700 text-slate-400">{intel.type}</span>
+          <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-gray-800 dark:text-slate-200 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">{intel.company}</a>
+          <span className="px-2 py-0.5 rounded text-xs bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-slate-400">{intel.type}</span>
         </div>
         <span className={`text-xs font-medium uppercase ${intel.severity === "high" ? "text-red-400" : "text-amber-400"}`}>{intel.severity} impact</span>
       </div>
-      <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-slate-100 mb-2 block hover:text-emerald-400 transition-colors">{intel.title}</a>
-      <p className="text-xs text-slate-400 mb-3 leading-relaxed">{intel.impact}</p>
+      <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-gray-900 dark:text-slate-100 mb-2 block hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">{intel.title}</a>
+      <p className="text-xs text-gray-500 dark:text-slate-400 mb-3 leading-relaxed">{intel.impact}</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2"><span className="text-xs text-emerald-400">&rarr;</span><span className="text-xs text-emerald-400/80">{intel.action}</span></div>
-        <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">View Source <span className="text-sm">{"\u2197"}</span></a>
+        <a href={intel.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-500 dark:text-cyan-400 hover:text-cyan-400 dark:hover:text-cyan-300 transition-colors flex items-center gap-1">View Source <span className="text-sm">{"\u2197"}</span></a>
       </div>
     </div>
   );
 };
 
 const StatCard = ({ label, value, sub, icon }) => (
-  <div className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4">
-    <div className="flex items-center justify-between mb-1"><span className="text-xs text-slate-500 uppercase tracking-wider">{label}</span><span className="text-lg">{icon}</span></div>
-    <div className="text-2xl font-bold text-slate-100">{value}</div>
-    <div className="text-xs text-slate-500 mt-0.5">{sub}</div>
+  <div className="bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
+    <div className="flex items-center justify-between mb-1"><span className="text-xs text-gray-500 dark:text-slate-500 uppercase tracking-wider">{label}</span><span className="text-lg">{icon}</span></div>
+    <div className="text-2xl font-bold text-gray-900 dark:text-slate-100">{value}</div>
+    <div className="text-xs text-gray-500 dark:text-slate-500 mt-0.5">{sub}</div>
   </div>
 );
 
 const SubredditBadge = ({ sub, onRemove }) => (
-  <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg px-3 py-2 hover:border-orange-500/40 hover:bg-slate-800/80 transition-all flex items-center gap-2 group">
+  <div className="bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 hover:border-orange-500/40 hover:bg-gray-50 dark:hover:bg-slate-800/80 transition-all flex items-center gap-2 group shadow-sm dark:shadow-none">
     <a href={sub.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
       <span className="text-orange-400 text-xs">🔴</span>
-      <span className="text-xs text-slate-300 group-hover:text-orange-300 transition-colors">{sub.name}</span>
-      <span className="text-xs text-slate-600">{sub.members}</span>
+      <span className="text-xs text-gray-700 dark:text-slate-300 group-hover:text-orange-300 transition-colors">{sub.name}</span>
+      <span className="text-xs text-gray-400 dark:text-slate-600">{sub.members}</span>
     </a>
     {sub.isCustom && onRemove && (
-      <button onClick={() => onRemove(sub.name)} className="text-[10px] text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-1" title="Remove">&times;</button>
+      <button onClick={() => onRemove(sub.name)} className="text-[10px] text-gray-400 dark:text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity ml-1" title="Remove">&times;</button>
     )}
   </div>
 );
@@ -394,8 +409,8 @@ const LoadingSpinner = () => (
       <span className="text-2xl">🔴</span>
       <span className="text-2xl">{"\u{1D54F}"}</span>
     </div>
-    <p className="text-sm text-slate-500">Loading live data from 3 sources...</p>
-    <p className="text-xs text-slate-600 mt-1">Hacker News + Reddit + Twitter</p>
+    <p className="text-sm text-gray-500 dark:text-slate-500">Loading live data from 3 sources...</p>
+    <p className="text-xs text-gray-400 dark:text-slate-600 mt-1">Hacker News + Reddit + Twitter</p>
   </div>
 );
 
@@ -413,6 +428,22 @@ const ErrorBanner = ({ errors, onRetry }) => (
 // MAIN DASHBOARD COMPONENT
 // ═══════════════════════════════════════════════════════════
 export default function CloudNewsDashboard() {
+  // Dark mode with localStorage persistence
+  const [darkMode, setDarkMode] = useState(() => {
+    const stored = localStorage.getItem('cloudpulse-theme');
+    return stored ? stored === 'dark' : true;
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('cloudpulse-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
   const [activeCategory, setActiveCategory] = useState("all");
   const [activePlatform, setActivePlatform] = useState("all");
   const [expandedCards, setExpandedCards] = useState({});
@@ -568,45 +599,45 @@ export default function CloudNewsDashboard() {
   const headerSummary = `${allNews.length} live articles \u2022 ${newsCount} news + ${redditCount} Reddit + ${twitterCount} Twitter \u2022 Updated ${timeStr}`;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-slate-100 flex" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
       {/* Mobile overlay */}
-      {sidebarOpen && <div className="fixed inset-0 bg-black/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
+      {sidebarOpen && <div className="fixed inset-0 bg-black/30 dark:bg-black/60 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />}
 
       {/* Sidebar */}
-      <aside className={`w-64 bg-slate-900/80 border-r border-slate-800 flex flex-col fixed h-full overflow-y-auto z-40 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
-        <div className="p-5 border-b border-slate-800">
+      <aside className={`w-64 bg-white/80 dark:bg-slate-900/80 border-r border-gray-200 dark:border-slate-800 flex flex-col fixed h-full overflow-y-auto z-40 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+        <div className="p-5 border-b border-gray-200 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-sm font-bold text-white">Z</div>
             <div>
-              <h1 className="text-base font-bold text-slate-100">CloudPulse</h1>
-              <p className="text-xs text-slate-500">by Riya's Intelligence</p>
+              <h1 className="text-base font-bold text-gray-900 dark:text-slate-100">CloudPulse</h1>
+              <p className="text-xs text-gray-500 dark:text-slate-500">by Riya's Intelligence</p>
             </div>
           </div>
         </div>
 
         <div className="p-4">
           <div className="relative">
-            <input type="text" placeholder="Search news..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50" />
-            <span className="absolute right-3 top-2.5 text-slate-600 text-xs">&#8984;K</span>
+            <input type="text" placeholder="Search news..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-gray-100 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-slate-300 placeholder-gray-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500/50" />
+            <span className="absolute right-3 top-2.5 text-gray-400 dark:text-slate-600 text-xs">&#8984;K</span>
           </div>
         </div>
 
         <nav className="flex-1 px-3 overflow-y-auto">
           {/* Categories header with + button */}
           <div className="flex items-center justify-between px-2 mb-2">
-            <p className="text-xs text-slate-600 uppercase tracking-wider">Categories</p>
-            <button onClick={() => setShowAddCategory(!showAddCategory)} className="w-5 h-5 rounded flex items-center justify-center text-xs text-slate-500 hover:text-emerald-400 hover:bg-slate-800 transition-all" title="Add custom category">
+            <p className="text-xs text-gray-400 dark:text-slate-600 uppercase tracking-wider">Categories</p>
+            <button onClick={() => setShowAddCategory(!showAddCategory)} className="w-5 h-5 rounded flex items-center justify-center text-xs text-gray-500 dark:text-slate-500 hover:text-emerald-400 hover:bg-gray-100 dark:hover:bg-slate-800 transition-all" title="Add custom category">
               {showAddCategory ? "\u2715" : "+"}
             </button>
           </div>
 
           {/* Add category form */}
           {showAddCategory && (
-            <div className="mb-3 bg-slate-800/60 border border-slate-700/50 rounded-lg p-3">
+            <div className="mb-3 bg-gray-100 dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-lg p-3">
               <p className="text-xs text-emerald-400 font-medium mb-2">New Category</p>
               <div className="flex gap-2 mb-2">
-                <input type="text" placeholder="Icon" value={newCatIcon} onChange={(e) => setNewCatIcon(e.target.value)} className="w-10 bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-sm text-center focus:outline-none focus:border-emerald-500/50" maxLength={2} />
-                <input type="text" placeholder="Category name" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleAddCategory()} className="flex-1 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-emerald-500/50" />
+                <input type="text" placeholder="Icon" value={newCatIcon} onChange={(e) => setNewCatIcon(e.target.value)} className="w-10 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded px-1.5 py-1 text-sm text-center focus:outline-none focus:border-emerald-500/50" maxLength={2} />
+                <input type="text" placeholder="Category name" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleAddCategory()} className="flex-1 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded px-2 py-1 text-sm text-gray-700 dark:text-slate-300 placeholder-gray-400 dark:placeholder-slate-600 focus:outline-none focus:border-emerald-500/50" />
               </div>
               <button onClick={handleAddCategory} className="w-full py-1.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 transition-all">Add Category</button>
             </div>
@@ -620,7 +651,7 @@ export default function CloudNewsDashboard() {
               <button
                 key={cat.id}
                 onClick={() => { setActiveCategory(cat.id); setSidebarOpen(false); }}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm mb-0.5 transition-all group ${activeCategory === cat.id ? "bg-emerald-500/15 text-emerald-400" : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-300"}`}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm mb-0.5 transition-all group ${activeCategory === cat.id ? "bg-emerald-500/15 text-emerald-400" : "text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-700 dark:hover:text-slate-300"}`}
               >
                 <div className="flex items-center gap-2.5">
                   <span>{cat.icon}</span>
@@ -630,37 +661,37 @@ export default function CloudNewsDashboard() {
                   )}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-xs ${activeCategory === cat.id ? "text-emerald-500" : "text-slate-600"}`}>{cat.count}</span>
+                  <span className={`text-xs ${activeCategory === cat.id ? "text-emerald-500" : "text-gray-400 dark:text-slate-600"}`}>{cat.count}</span>
                   {isCustom && (
-                    <span onClick={(e) => { e.stopPropagation(); removeCustomCategory(cat.id); }} className="text-[10px] text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Remove category">&times;</span>
+                    <span onClick={(e) => { e.stopPropagation(); removeCustomCategory(cat.id); }} className="text-[10px] text-gray-400 dark:text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" title="Remove category">&times;</span>
                   )}
                 </div>
               </button>
             );
           })}
 
-          <div className="border-t border-slate-800 my-4" />
-          <p className="px-2 text-xs text-slate-600 uppercase tracking-wider mb-2">Platform</p>
+          <div className="border-t border-gray-200 dark:border-slate-800 my-4" />
+          <p className="px-2 text-xs text-gray-400 dark:text-slate-600 uppercase tracking-wider mb-2">Platform</p>
           {PLATFORMS.map((plat) => (
-            <button key={plat.id} onClick={() => { setActivePlatform(plat.id); setSidebarOpen(false); }} className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm mb-0.5 transition-all ${activePlatform === plat.id ? "bg-cyan-500/15 text-cyan-400" : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-300"}`}>
+            <button key={plat.id} onClick={() => { setActivePlatform(plat.id); setSidebarOpen(false); }} className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm mb-0.5 transition-all ${activePlatform === plat.id ? "bg-cyan-500/15 text-cyan-400" : "text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-700 dark:hover:text-slate-300"}`}>
               <span>{plat.icon}</span><span>{plat.label}</span>
             </button>
           ))}
 
-          <div className="border-t border-slate-800 my-4" />
-          <p className="px-2 text-xs text-slate-600 uppercase tracking-wider mb-2">Relevance</p>
+          <div className="border-t border-gray-200 dark:border-slate-800 my-4" />
+          <p className="px-2 text-xs text-gray-400 dark:text-slate-600 uppercase tracking-wider mb-2">Relevance</p>
           {["all", "High", "Medium"].map((level) => (
-            <button key={level} onClick={() => { setRelevanceFilter(level); setSidebarOpen(false); }} className={`w-full flex items-center px-3 py-2 rounded-lg text-sm mb-0.5 transition-all ${relevanceFilter === level ? "bg-slate-700/50 text-slate-200" : "text-slate-500 hover:bg-slate-800/50 hover:text-slate-400"}`}>
+            <button key={level} onClick={() => { setRelevanceFilter(level); setSidebarOpen(false); }} className={`w-full flex items-center px-3 py-2 rounded-lg text-sm mb-0.5 transition-all ${relevanceFilter === level ? "bg-gray-200 dark:bg-slate-700/50 text-gray-800 dark:text-slate-200" : "text-gray-500 dark:text-slate-500 hover:bg-gray-100 dark:hover:bg-slate-800/50 hover:text-gray-600 dark:hover:text-slate-400"}`}>
               {level === "all" ? "All Levels" : level}
             </button>
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800">
-          <div className="bg-slate-800/40 rounded-lg p-3 text-center">
-            <p className="text-xs text-slate-500 mb-1">Data Sources</p>
+        <div className="p-4 border-t border-gray-200 dark:border-slate-800">
+          <div className="bg-gray-100 dark:bg-slate-800/40 rounded-lg p-3 text-center">
+            <p className="text-xs text-gray-500 dark:text-slate-500 mb-1">Data Sources</p>
             <p className="text-sm font-medium text-emerald-400">{isLoading ? "Loading..." : "Live"}</p>
-            <p className="text-xs text-slate-600 mt-1">News + {allSubreddits.length} subreddits + Twitter</p>
+            <p className="text-xs text-gray-400 dark:text-slate-600 mt-1">News + {allSubreddits.length} subreddits + Twitter</p>
           </div>
         </div>
       </aside>
@@ -668,19 +699,28 @@ export default function CloudNewsDashboard() {
       {/* Main Content */}
       <main className="flex-1 lg:ml-64">
         {/* Header */}
-        <header className="sticky top-0 z-10 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 px-6 py-4">
+        <header className="sticky top-0 z-10 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button onClick={() => setSidebarOpen(true)} className="lg:hidden w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-200">&equiv;</button>
+              <button onClick={() => setSidebarOpen(true)} className="lg:hidden w-8 h-8 rounded-lg bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200">&equiv;</button>
               <div>
-                <h2 className="text-xl font-bold text-slate-100">Daily Cloud Intelligence</h2>
-                <p className="text-sm text-slate-500">{headerSummary}</p>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-slate-100">Daily Cloud Intelligence</h2>
+                <p className="text-sm text-gray-500 dark:text-slate-500">{headerSummary}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex bg-slate-800/60 rounded-lg p-0.5 border border-slate-700/50">
+              {/* Theme toggle */}
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="w-9 h-9 rounded-lg bg-gray-200 dark:bg-slate-800 flex items-center justify-center text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 transition-colors border border-gray-300 dark:border-slate-700"
+                title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {darkMode ? <SunIcon /> : <MoonIcon />}
+              </button>
+              <div className="flex bg-gray-100 dark:bg-slate-800/60 rounded-lg p-0.5 border border-gray-200 dark:border-slate-700/50">
                 {["digest", "competitors", "subreddits", "trends"].map((tab) => (
-                  <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-emerald-500/20 text-emerald-400" : "text-slate-500 hover:text-slate-300"}`}>
+                  <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === tab ? "bg-emerald-500/20 text-emerald-400" : "text-gray-500 dark:text-slate-500 hover:text-gray-700 dark:hover:text-slate-300"}`}>
                     {tab === "digest" ? "Daily Digest" : tab === "competitors" ? "Competitor Intel" : tab === "subreddits" ? `Subreddits (${allSubreddits.length})` : "Trends"}
                   </button>
                 ))}
@@ -706,19 +746,19 @@ export default function CloudNewsDashboard() {
           {activeTab === "digest" && (
             <>
               {activePlatform !== "all" && (
-                <div className="mb-4 bg-slate-800/40 border border-slate-700/50 rounded-lg px-4 py-2 flex items-center gap-2">
-                  <span className="text-xs text-slate-400">Filtering by:</span>
+                <div className="mb-4 bg-gray-100 dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-lg px-4 py-2 flex items-center gap-2">
+                  <span className="text-xs text-gray-500 dark:text-slate-400">Filtering by:</span>
                   <span className="text-xs font-medium text-cyan-400">{PLATFORMS.find((p) => p.id === activePlatform)?.label}</span>
-                  <button onClick={() => setActivePlatform("all")} className="text-xs text-slate-600 hover:text-red-400 ml-2">&times; Clear</button>
+                  <button onClick={() => setActivePlatform("all")} className="text-xs text-gray-400 dark:text-slate-600 hover:text-red-400 ml-2">&times; Clear</button>
                 </div>
               )}
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="w-1 h-5 bg-emerald-500 rounded-full" />
-                  <h3 className="text-lg font-semibold text-slate-200">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">
                     {activeCategory === "all" ? "Today's Top Stories" : allCategories.find((c) => c.id === activeCategory)?.label || activeCategory}
                   </h3>
-                  <span className="text-sm text-slate-500">({filteredNews.length} items)</span>
+                  <span className="text-sm text-gray-500 dark:text-slate-500">({filteredNews.length} items)</span>
                 </div>
                 {isLoading ? (
                   <LoadingSpinner />
@@ -728,7 +768,7 @@ export default function CloudNewsDashboard() {
                       <NewsCard key={item.id} item={item} expanded={!!expandedCards[item.id]} onToggle={() => toggleExpand(item.id)} />
                     ))}
                     {filteredNews.length === 0 && (
-                      <div className="text-center py-12 text-slate-600">
+                      <div className="text-center py-12 text-gray-400 dark:text-slate-600">
                         <p className="text-4xl mb-3">🔍</p>
                         <p className="text-sm">No items match your current filters</p>
                         <p className="text-xs mt-1">Try changing category or platform filter</p>
@@ -744,17 +784,17 @@ export default function CloudNewsDashboard() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1 h-5 bg-red-500 rounded-full" />
-                <h3 className="text-lg font-semibold text-slate-200">Competitor Intelligence</h3>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Competitor Intelligence</h3>
               </div>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 {COMPETITOR_INTEL.map((intel, i) => <CompetitorCard key={i} intel={intel} />)}
               </div>
-              <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-5 mt-4">
-                <h4 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2"><span>📊</span> Weekly Competitive Summary</h4>
+              <div className="bg-white dark:bg-slate-800/40 border border-gray-200 dark:border-slate-700/50 rounded-xl p-5 mt-4 shadow-sm dark:shadow-none">
+                <h4 className="text-sm font-semibold text-gray-800 dark:text-slate-200 mb-3 flex items-center gap-2"><span>📊</span> Weekly Competitive Summary</h4>
                 <div className="grid grid-cols-3 gap-4 text-center">
-                  <div><div className="text-2xl font-bold text-red-400">4</div><div className="text-xs text-slate-500">Competitor Moves</div></div>
-                  <div><div className="text-2xl font-bold text-amber-400">2</div><div className="text-xs text-slate-500">Funding Rounds</div></div>
-                  <div><div className="text-2xl font-bold text-emerald-400">3</div><div className="text-xs text-slate-500">Blog Opportunities</div></div>
+                  <div><div className="text-2xl font-bold text-red-400">4</div><div className="text-xs text-gray-500 dark:text-slate-500">Competitor Moves</div></div>
+                  <div><div className="text-2xl font-bold text-amber-400">2</div><div className="text-xs text-gray-500 dark:text-slate-500">Funding Rounds</div></div>
+                  <div><div className="text-2xl font-bold text-emerald-400">3</div><div className="text-xs text-gray-500 dark:text-slate-500">Blog Opportunities</div></div>
                 </div>
               </div>
             </div>
@@ -765,8 +805,8 @@ export default function CloudNewsDashboard() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <div className="w-1 h-5 bg-orange-500 rounded-full" />
-                  <h3 className="text-lg font-semibold text-slate-200">Tracked Subreddits</h3>
-                  <span className="text-sm text-slate-500">({allSubreddits.length} active sources)</span>
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Tracked Subreddits</h3>
+                  <span className="text-sm text-gray-500 dark:text-slate-500">({allSubreddits.length} active sources)</span>
                 </div>
                 <button onClick={() => setShowAddSubreddit(!showAddSubreddit)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${showAddSubreddit ? "bg-red-500/20 text-red-400" : "bg-orange-500/20 text-orange-400 hover:bg-orange-500/30"}`}>
                   {showAddSubreddit ? "\u2715 Cancel" : "+ Add Subreddit"}
@@ -775,26 +815,26 @@ export default function CloudNewsDashboard() {
 
               {/* Add subreddit form */}
               {showAddSubreddit && (
-                <div className="mb-5 bg-slate-800/60 border border-slate-700/50 rounded-xl p-4">
+                <div className="mb-5 bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
                   <p className="text-sm text-orange-400 font-medium mb-3">Add a Subreddit</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
                     <div>
-                      <label className="text-xs text-slate-500 mb-1 block">Subreddit Name *</label>
-                      <input type="text" placeholder="e.g. r/cloudarchitecture" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
+                      <label className="text-xs text-gray-500 dark:text-slate-500 mb-1 block">Subreddit Name *</label>
+                      <input type="text" placeholder="e.g. r/cloudarchitecture" value={newSubName} onChange={(e) => setNewSubName(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-slate-300 placeholder-gray-400 dark:placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-500 mb-1 block">URL (optional)</label>
-                      <input type="text" placeholder="https://www.reddit.com/r/..." value={newSubUrl} onChange={(e) => setNewSubUrl(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
+                      <label className="text-xs text-gray-500 dark:text-slate-500 mb-1 block">URL (optional)</label>
+                      <input type="text" placeholder="https://www.reddit.com/r/..." value={newSubUrl} onChange={(e) => setNewSubUrl(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-slate-300 placeholder-gray-400 dark:placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
                     </div>
                     <div>
-                      <label className="text-xs text-slate-500 mb-1 block">Category</label>
-                      <select value={newSubCategory} onChange={(e) => setNewSubCategory(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 focus:outline-none focus:border-orange-500/50">
+                      <label className="text-xs text-gray-500 dark:text-slate-500 mb-1 block">Category</label>
+                      <select value={newSubCategory} onChange={(e) => setNewSubCategory(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-slate-300 focus:outline-none focus:border-orange-500/50">
                         {subredditCategories.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
                       </select>
                     </div>
                     <div>
-                      <label className="text-xs text-slate-500 mb-1 block">Members (optional)</label>
-                      <input type="text" placeholder="e.g. 12K" value={newSubMembers} onChange={(e) => setNewSubMembers(e.target.value)} className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
+                      <label className="text-xs text-gray-500 dark:text-slate-500 mb-1 block">Members (optional)</label>
+                      <input type="text" placeholder="e.g. 12K" value={newSubMembers} onChange={(e) => setNewSubMembers(e.target.value)} className="w-full bg-gray-50 dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-slate-300 placeholder-gray-400 dark:placeholder-slate-600 focus:outline-none focus:border-orange-500/50" />
                     </div>
                   </div>
                   <button onClick={handleAddSubreddit} className="px-4 py-2 rounded-lg text-sm font-medium bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 transition-all">Add Subreddit</button>
@@ -802,11 +842,11 @@ export default function CloudNewsDashboard() {
               )}
 
               <div className="flex flex-wrap gap-2 mb-5">
-                <button onClick={() => setSubredditFilter("all")} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${subredditFilter === "all" ? "bg-orange-500/20 text-orange-400" : "bg-slate-800 text-slate-500 hover:text-slate-300"}`}>
+                <button onClick={() => setSubredditFilter("all")} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${subredditFilter === "all" ? "bg-orange-500/20 text-orange-400" : "bg-gray-200 dark:bg-slate-800 text-gray-500 dark:text-slate-500 hover:text-gray-700 dark:hover:text-slate-300"}`}>
                   All ({allSubreddits.length})
                 </button>
                 {subredditCategories.map((cat) => (
-                  <button key={cat} onClick={() => setSubredditFilter(cat)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${subredditFilter === cat ? "bg-orange-500/20 text-orange-400" : "bg-slate-800 text-slate-500 hover:text-slate-300"}`}>
+                  <button key={cat} onClick={() => setSubredditFilter(cat)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${subredditFilter === cat ? "bg-orange-500/20 text-orange-400" : "bg-gray-200 dark:bg-slate-800 text-gray-500 dark:text-slate-500 hover:text-gray-700 dark:hover:text-slate-300"}`}>
                     {cat} ({allSubreddits.filter((s) => s.category === cat).length})
                   </button>
                 ))}
@@ -821,7 +861,7 @@ export default function CloudNewsDashboard() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1 h-5 bg-purple-500 rounded-full" />
-                <h3 className="text-lg font-semibold text-slate-200">Trending Topics</h3>
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-slate-200">Trending Topics</h3>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {[
@@ -832,10 +872,10 @@ export default function CloudNewsDashboard() {
                   { topic: "Serverless Cost Models", mentions: 4, trend: "\u2191 60%", desc: "AWS Savings Plans expansion making serverless economics more predictable" },
                   { topic: "Cloud Security + AI", mentions: 7, trend: "\u2191 150%", desc: "All three hyperscalers releasing AI-powered security tools simultaneously" },
                 ].map((t, i) => (
-                  <div key={i} className="bg-slate-800/60 border border-slate-700/50 rounded-xl p-4">
-                    <div className="flex items-center justify-between mb-2"><span className="text-sm font-semibold text-slate-200">{t.topic}</span><span className="text-xs text-emerald-400 font-medium">{t.trend}</span></div>
-                    <p className="text-xs text-slate-500 mb-3 leading-relaxed">{t.desc}</p>
-                    <div className="text-xs text-slate-600">{t.mentions} mentions today</div>
+                  <div key={i} className="bg-white dark:bg-slate-800/60 border border-gray-200 dark:border-slate-700/50 rounded-xl p-4 shadow-sm dark:shadow-none">
+                    <div className="flex items-center justify-between mb-2"><span className="text-sm font-semibold text-gray-800 dark:text-slate-200">{t.topic}</span><span className="text-xs text-emerald-400 font-medium">{t.trend}</span></div>
+                    <p className="text-xs text-gray-500 dark:text-slate-500 mb-3 leading-relaxed">{t.desc}</p>
+                    <div className="text-xs text-gray-400 dark:text-slate-600">{t.mentions} mentions today</div>
                   </div>
                 ))}
               </div>
